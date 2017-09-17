@@ -51,28 +51,56 @@ var settings = module.exports = {
         origin: "*",
         methods: "GET,PUT,POST,DELETE"
     },
-    
+
     // Disbled Credential Secret
     credentialSecret: false
 }
 
-if (process.env.NODE_RED_USERNAME && process.env.NODE_RED_PASSWORD) {
-    settings.adminAuth = {
-        type: "credentials",
-        users: function(username) {
-            if (process.env.NODE_RED_USERNAME == username) {
-                return when.resolve({username:username,permissions:"*"});
-            } else {
-                return when.resolve(null);
-            }
-        },
-        authenticate: function(username, password) {
-            if (process.env.NODE_RED_USERNAME == username &&
-                process.env.NODE_RED_PASSWORD == password) {
-                return when.resolve({username:username,permissions:"*"});
-            } else {
-                return when.resolve(null);
-            }
+settings.adminAuth = {
+    type: "credentials",
+    users: function(username) {
+        var users = [{
+          username: "joaomario",
+          permissions: "*"
+        },{
+          username: "junitec",
+          permissions: "flows.read, flows.write"
+      }];
+
+        if (process.env.NODE_RED_USERNAME == username) {
+            return when.resolve({username:username,permissions:"flows.read, flows.write"});
+        } else {
+            var user = users.find((user) => {return user.username == username});
+            if (user != null) return when.resolve({username, permissions: user.permissions});
+            else return when.resolve(null);
+       }
+    },
+    authenticate: function(username, password) {
+
+        var users = [{
+          username: "joaomario",
+          password: "$2a$08$DWZVyMi/.4cdVo8Km28YS.XMYMKjkn955lrCJXLNmRVlJVK4XXA9G"
+          permissions: "*"
+        },{
+          username: "junitec",
+          password: "$2a$08$2C0o6P0zY6.toBi8IVUWLO3LQVgOzh6sGGdHvEYl5TWkobigp7rNe" //junitec-iot
+          permissions: "flows.read, flows.write"
+        }];
+
+        if (process.env.NODE_RED_USERNAME == username &&
+            process.env.NODE_RED_PASSWORD == password) {
+            return when.resolve({username:username,permissions:"flows.read, flows.write"});
+        } else {
+            var user = users.find((user) => {return user.username == username && user.password == password});
+            if (user != null) return when.resolve({username, permissions: user.permissions});
+            else return when.resolve(null);
+        }
+
+        if (process.env.NODE_RED_USERNAME == username &&
+            process.env.NODE_RED_PASSWORD == password) {
+            return when.resolve({username:username,permissions:"*"});
+        } else {
+            return when.resolve(null);
         }
     }
 }
