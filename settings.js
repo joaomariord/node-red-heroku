@@ -79,11 +79,11 @@ settings.adminAuth = {
 
         var users = [{
           username: "joaomario",
-          password: "$2a$08$DWZVyMi/.4cdVo8Km28YS.XMYMKjkn955lrCJXLNmRVlJVK4XXA9G"
+          password: "$2a$08$DWZVyMi/.4cdVo8Km28YS.XMYMKjkn955lrCJXLNmRVlJVK4XXA9G",
           permissions: "*"
         },{
           username: "junitec",
-          password: "$2a$08$2C0o6P0zY6.toBi8IVUWLO3LQVgOzh6sGGdHvEYl5TWkobigp7rNe" //junitec-iot
+          password: "$2a$08$2C0o6P0zY6.toBi8IVUWLO3LQVgOzh6sGGdHvEYl5TWkobigp7rNe", //junitec-iot
           permissions: "flows.read, flows.write"
         }];
 
